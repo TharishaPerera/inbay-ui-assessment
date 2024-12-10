@@ -5,6 +5,7 @@ import { searchMovies } from "../api";
 import { Search } from "../components/search";
 import { MovieCard } from "../components/movie-card";
 import { Message } from "../components/message";
+import { Loader } from "../components/loader";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -42,7 +43,7 @@ const Home = () => {
     setMessage("");
   };
 
-  loading && <p>Loading...</p>;
+  loading && <Loader />;
 
   return (
     <div className="mb-20">

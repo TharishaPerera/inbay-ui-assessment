@@ -9,6 +9,7 @@ import { MovieDetailsType } from "../types/movie-types";
 import { getMovieDetails } from "../api";
 import { MovieDetailTable } from "../components/movie.detail-table";
 import { useFavorites } from "../context/favorites-context";
+import { Loader } from "../components/loader";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const MovieDetails = () => {
   }, [id]);
 
   if (!movie) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   const genres: string[] = movie.Genre.split(", ").map((genre) => genre.trim());
