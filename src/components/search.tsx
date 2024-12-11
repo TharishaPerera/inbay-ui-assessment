@@ -71,9 +71,8 @@ export const Search: React.FC<SearchProps> = ({
       >
         <CiSearch className="w-6 h-6" />
       </button>
-      {((showReset && search.length > 0) ||
-        (showHistory && search.length > 0) ||
-        (showReset && search.length === 0 && showHistory)) && (
+      {((showReset && search.length === 0 && !showHistory) ||
+        (!showReset && search.length > 0 && showHistory)) && (
         <button
           className="bg-gray-300 hover:bg-gray-400 text-black font-bold p-2 rounded-lg"
           onClick={handleReset}

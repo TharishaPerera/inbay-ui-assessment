@@ -7,6 +7,7 @@ import { MovieCard } from "../components/movie-card";
 import { Message } from "../components/message";
 import { Loader } from "../components/loader";
 import { Sort } from "../components/sort";
+import { Placeholder } from "../components/placeholder-image";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -94,7 +95,7 @@ const Home = () => {
     setSearchHistory(savedHistory);
   }, []);
 
-  loading && <Loader />;
+  if (loading) return<Loader />;
 
   return (
     <div className="mb-20">
@@ -110,11 +111,11 @@ const Home = () => {
         <div className="bg-blue-100 relative max-w-2xl w-full z-50">
           {searchHistory.length > 0 && showHistory && (
             <div className="mt-2 w-full justify-start self-center bg-gray-100 px-4 py-3 rounded-lg shadow-lg absolute">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-2 p-2">
                 <p className="font-semibold">Search History</p>
                 <button
                   onClick={handleClearHistory}
-                  className="text-red-500 underline"
+                  className="text-red-500 underline hover:bg-red-100 px-2 py-1 rounded-md"
                 >
                   Clear
                 </button>
@@ -123,10 +124,10 @@ const Home = () => {
                 {searchHistory.map((query, index) => (
                   <li key={index}>
                     <button
-                      className=""
+                      className="w-full text-start p-2 rounded-md hover:bg-gray-200"
                       onClick={() => {
-                        handleHistoryClick(query)
-                        setShowHistory(false)
+                        handleHistoryClick(query);
+                        setShowHistory(false);
                       }}
                     >
                       {query}
@@ -141,12 +142,13 @@ const Home = () => {
       {movies?.length > 0 && (
         <Sort handleSort={handleSort} sortKey={sortKey} sortOrder={sortOrder} />
       )}
-      {movies.length === 0 && !loading && !error && (
-        <Message
-          message={message || "Search your favorite movies!"}
-          variant="info"
-        />
-      )}
+      {movies.length === 0 && !loading && !error ? (
+        message ? (
+          <Message message={message} variant="info" />
+        ) : (
+          <Placeholder />
+        )
+      ) : null}
       {movies.length === 0 || loading || error ? (
         <div className="mt-12">
           {error && <Message message={error} variant="error" />}
