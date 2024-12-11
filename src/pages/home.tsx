@@ -6,12 +6,15 @@ import { Search } from "../components/search";
 import { MovieCard } from "../components/movie-card";
 import { Message } from "../components/message";
 import { Loader } from "../components/loader";
+import { Sort } from "../components/sort";
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortKey, setSortKey] = useState<"Title" | "Year">("Title");
 
   const handleSearch = async (query: string) => {
     setLoading(true);
@@ -38,6 +41,22 @@ const Home = () => {
     }
   };
 
+  const handleSort = (key: "Title" | "Year", order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+
+    const sortedMovies = [...movies].sort((first, second) => {
+      const valueA = first[key];
+      const valueB = second[key];
+
+      if (valueA < valueB) return order === "asc" ? -1 : 1;
+      if (valueA > valueB) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setMovies(sortedMovies);
+  };
+
   const handleReset = () => {
     setMovies([]);
     setMessage("");
@@ -55,6 +74,9 @@ const Home = () => {
           showReset={movies?.length > 0 ? true : false}
         />
       </div>
+      {movies?.length > 0 && (
+        <Sort handleSort={handleSort} sortKey={sortKey} sortOrder={sortOrder} />
+      )}
       {movies.length === 0 && !loading && !error && (
         <Message
           message={message || "Search your favorite movies!"}
