@@ -8,15 +8,21 @@ interface SearchProps {
   onSearch?: (query: string) => void;
   onReset?: () => void;
   showReset: boolean;
+  showHistory: boolean;
+  setShowHistory: (value: boolean) => void;
 }
 
 export const Search: React.FC<SearchProps> = ({
   className,
   onSearch,
   onReset,
-  showReset = false,
+  showReset,
+  showHistory,
+  setShowHistory
 }) => {
   const [search, setSearch] = React.useState("");
+  const [typingTimeout, setTypingTimeout] =
+    React.useState<NodeJS.Timeout | null>(null);
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -26,7 +32,24 @@ export const Search: React.FC<SearchProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
+      setShowHistory(false);
     }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setSearch(newValue);
+
+    setShowHistory(true);
+    // Clear any previous timeout to avoid immediate hiding
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+    // Set a timeout to hide the search history after 2s of inactivity
+    const timeout = setTimeout(() => {
+      setShowHistory(false);
+    }, 2000);
+
+    setTypingTimeout(timeout);
   };
   const handleReset = () => {
     setSearch("");
@@ -39,7 +62,7 @@ export const Search: React.FC<SearchProps> = ({
         value={search}
         placeholder="Search your favorite movie title..."
         className={`w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300 text-black ${className}`}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
       <button
@@ -48,7 +71,9 @@ export const Search: React.FC<SearchProps> = ({
       >
         <CiSearch className="w-6 h-6" />
       </button>
-      {showReset && (
+      {((showReset && search.length > 0) ||
+        (showHistory && search.length > 0) ||
+        (showReset && search.length === 0 && showHistory)) && (
         <button
           className="bg-gray-300 hover:bg-gray-400 text-black font-bold p-2 rounded-lg"
           onClick={handleReset}

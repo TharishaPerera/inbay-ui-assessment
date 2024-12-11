@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Movie } from "../types/movie-types";
 import { searchMovies } from "../api";
@@ -15,8 +15,22 @@ const Home = () => {
   const [message, setMessage] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortKey, setSortKey] = useState<"Title" | "Year">("Title");
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [showHistory, setShowHistory] = useState<boolean>(false);
 
   const handleSearch = async (query: string) => {
+    if (!query) return; // skip empty searches
+
+    // Update search history on local storage
+    setSearchHistory((prevHistory) => {
+      const updatedHistory = [
+        query,
+        ...prevHistory.filter((item) => item !== query),
+      ];
+      localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+      return updatedHistory;
+    });
+
     setLoading(true);
     setError(null);
     setMovies([]); // to clear the previous results
@@ -60,19 +74,69 @@ const Home = () => {
   const handleReset = () => {
     setMovies([]);
     setMessage("");
+    setShowHistory(false);
   };
+
+  const handleHistoryClick = (query: string) => {
+    handleSearch(query);
+  };
+  const handleClearHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem("searchHistory");
+    handleReset();
+  };
+
+  // get search history from the local storage
+  useEffect(() => {
+    const savedHistory = JSON.parse(
+      localStorage.getItem("searchHistory") || "[]"
+    );
+    setSearchHistory(savedHistory);
+  }, []);
 
   loading && <Loader />;
 
   return (
     <div className="mb-20">
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex flex-col justify-center items-center">
         <Search
-          className="border border-gray-300 max-w-lg"
+          className="border border-gray-300 max-w-xl"
           onSearch={handleSearch}
           onReset={handleReset}
           showReset={movies?.length > 0 ? true : false}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
         />
+        <div className="bg-blue-100 relative max-w-2xl w-full z-50">
+          {searchHistory.length > 0 && showHistory && (
+            <div className="mt-2 w-full justify-start self-center bg-gray-100 px-4 py-3 rounded-lg shadow-lg absolute">
+              <div className="flex justify-between items-center mb-2">
+                <p className="font-semibold">Search History</p>
+                <button
+                  onClick={handleClearHistory}
+                  className="text-red-500 underline"
+                >
+                  Clear
+                </button>
+              </div>
+              <ul className="list-none">
+                {searchHistory.map((query, index) => (
+                  <li key={index}>
+                    <button
+                      className=""
+                      onClick={() => {
+                        handleHistoryClick(query)
+                        setShowHistory(false)
+                      }}
+                    >
+                      {query}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
       {movies?.length > 0 && (
         <Sort handleSort={handleSort} sortKey={sortKey} sortOrder={sortOrder} />
