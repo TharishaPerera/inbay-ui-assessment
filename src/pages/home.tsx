@@ -157,7 +157,11 @@ const Home = () => {
         <div className="mt-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {movies.map((movie) => (
-              <MovieCard key={movie.imdbID} movie={movie} />
+              <MovieCard
+                key={movie.imdbID}
+                movie={movie}
+                className="hover:transform hover:scale-105"
+              />
             ))}
           </div>
         </div>

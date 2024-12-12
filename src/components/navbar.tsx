@@ -36,7 +36,7 @@ export const Navbar = () => {
 
         <div className="hidden md:flex md:items-center md:space-x-4">
           {/* navigation links */}
-          <NavLinks className="flex space-x-4" />
+          <NavLinks className="flex items-center space-x-4" />
         </div>
       </div>
 

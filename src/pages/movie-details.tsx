@@ -47,7 +47,7 @@ const MovieDetails = () => {
         <img
           src={movie.Poster}
           alt={movie.Title}
-          className="h-auto w-full object-cover rounded"
+          className="h-auto w-full object-cover rounded-md"
         />
       </div>
       <div className="lg:col-span-3 space-y-3">
@@ -62,7 +62,7 @@ const MovieDetails = () => {
               )}
             </button>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mt-3">
             <Badge label={movie.Year} />
             <Badge label={movie.Type} />
             <Badge label={movie.Rated} />

@@ -8,10 +8,10 @@ interface MovieCardProps {
   className?: string;
 }
 
-export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+export const MovieCard: React.FC<MovieCardProps> = ({ movie, className }) => {
   return (
     <div>
-      <div className="w-full border space-y-2 p-2 rounded-lg shadow hover:shadow-lg hover:transform hover:scale-105 transition duration-200">
+      <div className={`${className} w-full border space-y-2 p-2 rounded-lg shadow hover:shadow-lg transition duration-200`}>
         <img
           src={movie.Poster}
           alt={movie.Title}
@@ -21,14 +21,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           <h3 className="text-md font-semibold h-12">{movie.Title}</h3>
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500 font-bold">{movie.Year}</p>
-            <p className="text-sm uppercase text-gray-950 font-medium bg-gray-300 px-4 rounded-md">
+            <p className="text-xs uppercase text-gray-950 font-medium bg-gray-300 px-4 py-1 rounded-md">
               {movie.Type}
             </p>
           </div>
         </div>
         <Link
           to={`/movie/${movie.imdbID}`}
-          className="flex w-full uppercase font-semibold text-center justify-center text-gray-200 bg-gray-900 hover:bg-gray-700 px-4 py-1 rounded-md"
+          className="flex w-full text-md uppercase font-semibold text-center justify-center text-gray-200 bg-gray-900 hover:bg-gray-700 px-4 py-2 rounded-md"
         >
           View Movie Details
         </Link>

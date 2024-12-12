@@ -21,9 +21,9 @@ const Favorites = () => {
               <MovieCard movie={movie} />
               <button
                 onClick={() => removeFavorite(movie.imdbID)}
-                className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded"
+                className="absolute top-2 right-2 bg-red-400 hover:bg-red-600 text-white p-1 rounded"
               >
-                <IoCloseSharp className="w-6 h-6" />
+                <IoCloseSharp className="w-6 h-6 " />
               </button>
             </div>
           ))}

@@ -19,7 +19,7 @@ export const NavLinks: React.FC<NavLinksProps> = ({ className }) => {
             key={index}
             to={link.path}
             className={`font-semibold transition ${
-              isActive ? "underline underline-offset-4" : "hover:text-gray-600 "
+              isActive ? "bg-gray-200 py-1 px-2 rounded-lg" : "hover:text-gray-600 "
             }`}
           >
             {link.name}
