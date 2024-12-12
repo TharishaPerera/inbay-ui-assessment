@@ -42,18 +42,18 @@ const MovieDetails = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8 mb-20">
-      <div className="lg:col-span-1">
+    <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8 mb-20">
+      <div className="flex">
         <img
           src={movie.Poster}
           alt={movie.Title}
-          className="h-auto w-full object-cover rounded-md"
+          className="w-full h-auto lg:h-full object-cover rounded-md"
         />
       </div>
-      <div className="lg:col-span-3 space-y-3">
+      <div className="space-y-4 flex flex-col">
         <div className="shadow p-4 rounded-md">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl w-full font-semibold">{movie.Title}</h1>
+            <h1 className="text-2xl font-semibold">{movie.Title}</h1>
             <button onClick={handleFavorite}>
               {isFavorite ? (
                 <IoHeartSharp className="w-7 h-7" />
@@ -77,9 +77,9 @@ const MovieDetails = () => {
             ))}
           </div>
         </div>
-        <div className="shadow rounded-md">
+        <div className="shadow rounded-md flex-grow">
           <h2 className="p-4 text-lg font-semibold">Other Details</h2>
-          <div className="relative flex flex-col w-full h-full lg:h-56 overflow-x-scroll lg:overflow-x-hidden lg:overflow-y-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+          <div className="relative flex flex-col w-full overflow-x-scroll lg:overflow-x-hidden text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
             <MovieDetailTable movie={movie} />
           </div>
         </div>
